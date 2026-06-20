@@ -20,9 +20,12 @@ jobs:
         cache: gradle
 
     - name: Decode signing certificates
+      env:
+        SIGNING_PK8: ${{ secrets.SIGNING_PK8 }}
+        SIGNING_CERT_PEM: ${{ secrets.SIGNING_CERT_PEM }}
       run: |
-        echo "${{ secrets.SIGNING_PK8 }}" | base64 -d > app/mixin/testkey.pk8
-        echo "${{ secrets.SIGNING_CERT_PEM }}" | base64 -d > app/mixin/testkey.x509.pem
+        echo "$SIGNING_PK8" | base64 -d > app/mixin/testkey.pk8
+        echo "$SIGNING_CERT_PEM" | base64 -d > app/mixin/testkey.x509.pem
         echo "Certificates decoded successfully"
 
     - name: Grant execute permission for gradlew
