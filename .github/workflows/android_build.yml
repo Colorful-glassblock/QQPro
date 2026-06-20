@@ -11,9 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Test secret
+      - name: Test env
         env:
-          MY_SECRET: ${{ secrets.SIGNING_PK8 }}
-        run: |
-          echo "Secret length: ${#MY_SECRET}"
-          echo "Secret exists: $([ -n "$MY_SECRET" ] && echo yes || echo no)"
+          TEST_VAR: hello123
+        run: echo "Got: $TEST_VAR"
