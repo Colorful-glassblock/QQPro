@@ -17,5 +17,18 @@ jobs:
           java-version: "17"
           distribution: temurin
           cache: gradle
-      - name: Test
-        run: echo "Java setup OK"
+      - name: Decode signing certificates
+        run: |
+          mkdir -p app/mixin
+          echo '${{ secrets.SIGNING_PK8 }}' | base64 -d > app/mixin/testkey.pk8
+          echo '${{ secrets.SIGNING_CERT_PEM }}' | base64 -d > app/mixin/testkey.x509.pem
+          ls -la app/mixin/testkey.*
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew MixinApk-release
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: QQPro
+          path: app/dist/QQPro*.apk
